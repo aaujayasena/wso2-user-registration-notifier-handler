@@ -78,8 +78,8 @@ The email sending mechanism is implemented using **JavaMail API**. Make sure to 
 ### SMTP Configuration Example
 ```properties
 [output_adapter.email]
-from_address= "asgardeotest3@gmail.com"
-username= "asgardeotest3@gmail.com"
+from_address= "email@gmail.com"
+username= "email@gmail.com"
 password= "yourpassword"
 hostname= "smtp.gmail.com"
 port= 587
@@ -87,51 +87,21 @@ enable_start_tls= true
 enable_authentication= true
 signature = "gmail.com"
 ```
+## 🧪 How to Test
 
-## 🔄 Git Workflow
-### Check Git Status
+### 1️⃣ Create a New User via SCIM API
 ```sh
-git status
+curl -X POST -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d '{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+  "userName": "testuser",
+  "password": "P@ssw0rd",
+  "emails": [{"value": "testuser@example.com", "primary": true}]
+}' "https://localhost:9443/scim2/Users"
 ```
 
-### Add Changes to Staging
-```sh
-git add .
-```
-
-### Commit Changes
-```sh
-git commit -m "Added event handler for user registration notifications"
-```
-
-### Push to GitHub
-```sh
-git push origin main
-```
-
-### Handling Push Errors (If Needed)
-If your branch is behind the remote branch:
-```sh
-git pull --rebase origin main
-```
-Then push again:
-```sh
-git push origin main
-```
-
-## 🔍 Debugging Tips
-### Check Logs for Activation
+### 2️⃣ Check Server Logs for Email Sending Confirmation
 ```sh
 tail -f <WSO2_HOME>/repository/logs/wso2carbon.log
-```
-Look for:
-```sh
-INFO {org.wso2.custom.handler.UserRegistrtaionNotifierEventComponent} - Custom User Registration notifier Event Handler Activated Successfully.
-```
-
-### Verify Installed Bundles
-```sh
-osgi> ss | grep UserRegistrtaionNotifierEventHandler
 ```
 
 ## 🛠 Future Improvements
